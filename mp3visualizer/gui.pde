@@ -14,9 +14,9 @@
  * =========================================================
  */
 
-synchronized public void win_draw2(PApplet appc, GWinData data) { //_CODE_:window1:473482:
+synchronized public void win_draw2(PApplet appc, GWinData data) { //_CODE_:MainWindow:473482:
   appc.background(230);
-} //_CODE_:window1:473482:
+} //_CODE_:MainWindow:473482:
 
 public void sidebar_click(GPanel source, GEvent event) { //_CODE_:sidebar:903496:
   println("sidebar - GPanel >> GEvent." + event + " @ " + millis());
@@ -25,6 +25,10 @@ public void sidebar_click(GPanel source, GEvent event) { //_CODE_:sidebar:903496
 public void songlist_click(GPanel source, GEvent event) { //_CODE_:songlist:251911:
   println("songlist - GPanel >> GEvent." + event + " @ " + millis());
 } //_CODE_:songlist:251911:
+
+public void songlist_song_click(GButton source, GEvent event) { //_CODE_:songlist_song_dummy:200550:
+  println(source.getText() + " - GButton >> GEvent." + event + " @ " + millis());
+} //_CODE_:songlist_song_dummy:200550:
 
 public void debug_panel_click(GPanel source, GEvent event) { //_CODE_:debug_panel:987713:
   println("debug_panel - GPanel >> GEvent." + event + " @ " + millis());
@@ -83,89 +87,89 @@ public void createGUI(){
   G4P.setGlobalColorScheme(GCScheme.BLUE_SCHEME);
   G4P.setMouseOverEnabled(false);
   surface.setTitle("Sketch Window");
-  window1 = GWindow.getWindow(this, "Window title", 0, 0, 1024, 600, JAVA2D);
-  window1.noLoop();
-  window1.setActionOnClose(G4P.KEEP_OPEN);
-  window1.addDrawHandler(this, "win_draw2");
-  sidebar = new GPanel(window1, 0, -20, 200, 620, "Sidebar");
+  MainWindow = GWindow.getWindow(this, "MainWindow", 0, 0, 1024, 600, JAVA2D);
+  MainWindow.noLoop();
+  MainWindow.setActionOnClose(G4P.KEEP_OPEN);
+  MainWindow.addDrawHandler(this, "win_draw2");
+  sidebar = new GPanel(MainWindow, 0, -20, 200, 620, "Sidebar");
   sidebar.setCollapsible(false);
   sidebar.setDraggable(false);
   sidebar.setText("Sidebar");
   sidebar.setOpaque(true);
   sidebar.addEventHandler(this, "sidebar_click");
-  programm_name = new GLabel(window1, 10, 30, 180, 30);
+  programm_name = new GLabel(MainWindow, 10, 30, 180, 30);
   programm_name.setText("MP3 Visualizer");
   programm_name.setOpaque(false);
-  songlist = new GPanel(window1, 0, 80, 200, 470, "Songs");
+  songlist = new GPanel(MainWindow, 0, 70, 200, 470, "Songs");
   songlist.setCollapsible(false);
   songlist.setDraggable(false);
   songlist.setText("Songs");
   songlist.setOpaque(true);
   songlist.addEventHandler(this, "songlist_click");
-  song_1 = new GLabel(window1, 10, 20, 160, 20);
-  song_1.setText("song 1");
-  song_1.setOpaque(false);
-  songlist.addControl(song_1);
-  debug_panel = new GPanel(window1, 0, 570, 200, 50, "Debug");
+  songlist_song_dummy = new GButton(MainWindow, 10, 30, 180, 30);
+  songlist_song_dummy.setText("Face text");
+  songlist_song_dummy.addEventHandler(this, "songlist_song_click");
+  songlist.addControl(songlist_song_dummy);
+  debug_panel = new GPanel(MainWindow, 0, 570, 200, 50, "Debug");
   debug_panel.setCollapsible(false);
   debug_panel.setDraggable(false);
   debug_panel.setText("Debug");
   debug_panel.setOpaque(true);
   debug_panel.addEventHandler(this, "debug_panel_click");
-  debug_label = new GLabel(window1, 10, 20, 180, 20);
+  debug_label = new GLabel(MainWindow, 10, 20, 180, 20);
   debug_label.setText("...");
   debug_label.setOpaque(false);
   debug_panel.addControl(debug_label);
   sidebar.addControl(programm_name);
   sidebar.addControl(songlist);
   sidebar.addControl(debug_panel);
-  main_menu = new GPanel(window1, 200, -20, 826, 73, "");
+  main_menu = new GPanel(MainWindow, 200, -20, 826, 73, "");
   main_menu.setCollapsible(false);
   main_menu.setDraggable(false);
   main_menu.setOpaque(true);
   main_menu.addEventHandler(this, "mein_menu_click");
-  song_title = new GLabel(window1, 10, 30, 150, 30);
+  song_title = new GLabel(MainWindow, 10, 30, 150, 30);
   song_title.setTextAlign(GAlign.LEFT, GAlign.LEFT);
   song_title.setText("Current Song");
   song_title.setOpaque(false);
   main_menu.addControl(song_title);
-  content = new GPanel(window1, 200, 50, 824, 550, "Tab bar text");
+  content = new GPanel(MainWindow, 200, 50, 824, 550, "Tab bar text");
   content.setCollapsible(false);
   content.setDraggable(false);
   content.setText("Tab bar text");
   content.setLocalColorScheme(GCScheme.SCHEME_8);
   content.setOpaque(true);
   content.addEventHandler(this, "content_click");
-  controls = new GPanel(window1, 0, 410, 830, 130, "Controls");
+  controls = new GPanel(MainWindow, 0, 410, 830, 130, "Controls");
   controls.setCollapsible(false);
   controls.setDraggable(false);
   controls.setText("Controls");
   controls.setLocalColorScheme(GCScheme.SCHEME_8);
   controls.setOpaque(true);
   controls.addEventHandler(this, "controls_click");
-  progress_slider = new GCustomSlider(window1, 0, 30, 600, 40, "grey_blue");
+  progress_slider = new GCustomSlider(MainWindow, 0, 30, 600, 40, "grey_blue");
   progress_slider.setLimits(0.5, 0.0, 1.0);
   progress_slider.setNumberFormat(G4P.DECIMAL, 2);
   progress_slider.setOpaque(false);
   progress_slider.addEventHandler(this, "progress_slider_change");
-  custom_slider2 = new GCustomSlider(window1, 620, 30, 188, 40, "grey_blue");
+  custom_slider2 = new GCustomSlider(MainWindow, 620, 30, 188, 40, "grey_blue");
   custom_slider2.setLimits(0.5, 0.0, 1.0);
   custom_slider2.setNumberFormat(G4P.DECIMAL, 2);
   custom_slider2.setOpaque(false);
   custom_slider2.addEventHandler(this, "custom_slider2_change1");
-  control_buttons = new GPanel(window1, 280, 80, 260, 50, "");
+  control_buttons = new GPanel(MainWindow, 280, 80, 260, 50, "");
   control_buttons.setCollapsible(false);
   control_buttons.setDraggable(false);
   control_buttons.setLocalColorScheme(GCScheme.SCHEME_8);
   control_buttons.setOpaque(true);
   control_buttons.addEventHandler(this, "control_buttons_click");
-  btn_next = new GButton(window1, 180, 10, 80, 30);
+  btn_next = new GButton(MainWindow, 180, 10, 80, 30);
   btn_next.setText("next");
   btn_next.addEventHandler(this, "btn_next_click");
-  btn_play_pause = new GButton(window1, 90, 10, 80, 30);
+  btn_play_pause = new GButton(MainWindow, 90, 10, 80, 30);
   btn_play_pause.setText("play");
   btn_play_pause.addEventHandler(this, "btn_play_pause_click");
-  btn_back = new GButton(window1, 0, 10, 80, 30);
+  btn_back = new GButton(MainWindow, 0, 10, 80, 30);
   btn_back.setText("back");
   btn_back.addEventHandler(this, "btn_back_click");
   control_buttons.addControl(btn_next);
@@ -174,13 +178,13 @@ public void createGUI(){
   controls.addControl(progress_slider);
   controls.addControl(custom_slider2);
   controls.addControl(control_buttons);
-  visualize_window_left = new GPanel(window1, 22, 22, 379, 379, "Visualization left");
+  visualize_window_left = new GPanel(MainWindow, 22, 22, 379, 379, "Visualization left");
   visualize_window_left.setCollapsible(false);
   visualize_window_left.setDraggable(false);
   visualize_window_left.setText("Visualization left");
   visualize_window_left.setOpaque(true);
   visualize_window_left.addEventHandler(this, "visualize_window_left_click");
-  visualize_window_right = new GPanel(window1, 420, 20, 379, 379, "Visualization right");
+  visualize_window_right = new GPanel(MainWindow, 420, 20, 379, 379, "Visualization right");
   visualize_window_right.setCollapsible(false);
   visualize_window_right.setDraggable(false);
   visualize_window_right.setText("Visualization right");
@@ -189,16 +193,16 @@ public void createGUI(){
   content.addControl(controls);
   content.addControl(visualize_window_left);
   content.addControl(visualize_window_right);
-  window1.loop();
+  MainWindow.loop();
 }
 
 // Variable declarations 
 // autogenerated do not edit
-GWindow window1;
+GWindow MainWindow;
 GPanel sidebar; 
 GLabel programm_name; 
 GPanel songlist; 
-GLabel song_1; 
+GButton songlist_song_dummy; 
 GPanel debug_panel; 
 GLabel debug_label; 
 GPanel main_menu; 
