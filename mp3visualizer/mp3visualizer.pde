@@ -69,6 +69,7 @@ public void load_songlist() {
     songlistButtons[i] = song;
     songFileNames[i] = f;
     songFiles[i] = new SoundFile(this, f);
+    song_title.setText(f);
   }
 
   setCurrentSong(currentSongId);
@@ -158,11 +159,6 @@ public void back() {
   }
 
   currentSong.jump(0);
-}
-
-public void setVolume(int percent) {
-}
-public void setProgress(int percent) {
 }
 
 public void updateDurationLabel() {
