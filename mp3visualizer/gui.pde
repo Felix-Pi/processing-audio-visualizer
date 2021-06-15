@@ -27,7 +27,7 @@ public void songlist_click(GPanel source, GEvent event) { //_CODE_:songlist:2519
 } //_CODE_:songlist:251911:
 
 public void songlist_song_click(GButton source, GEvent event) { //_CODE_:songlist_song_dummy:200550:
-  println(source.getText() + " - GButton >> GEvent." + event + " @ " + millis());
+  println("songlist_song_dummy - GButton >> GEvent." + event + " @ " + millis());
 } //_CODE_:songlist_song_dummy:200550:
 
 public void debug_panel_click(GPanel source, GEvent event) { //_CODE_:debug_panel:987713:
@@ -47,7 +47,7 @@ public void controls_click(GPanel source, GEvent event) { //_CODE_:controls:3287
 } //_CODE_:controls:328727:
 
 public void progress_slider_change(GCustomSlider source, GEvent event) { //_CODE_:progress_slider:414869:
-  println("custom_slider1 - GCustomSlider >> GEvent." + event + " @ " + millis());
+  println("progress_slider - GCustomSlider >> GEvent." + event + " @ " + millis());
 } //_CODE_:progress_slider:414869:
 
 public void custom_slider2_change1(GCustomSlider source, GEvent event) { //_CODE_:custom_slider2:442201:
@@ -75,7 +75,7 @@ public void visualize_window_left_click(GPanel source, GEvent event) { //_CODE_:
 } //_CODE_:visualize_window_left:390962:
 
 public void visualize_window_right_click(GPanel source, GEvent event) { //_CODE_:visualize_window_right:319029:
-  println("panel1 - GPanel >> GEvent." + event + " @ " + millis());
+  println("visualize_window_right - GPanel >> GEvent." + event + " @ " + millis());
 } //_CODE_:visualize_window_right:319029:
 
 
@@ -140,7 +140,7 @@ public void createGUI(){
   content.setLocalColorScheme(GCScheme.SCHEME_8);
   content.setOpaque(true);
   content.addEventHandler(this, "content_click");
-  controls = new GPanel(MainWindow, 0, 410, 830, 130, "Controls");
+  controls = new GPanel(MainWindow, 22, 410, 830, 130, "Controls");
   controls.setCollapsible(false);
   controls.setDraggable(false);
   controls.setText("Controls");
@@ -152,12 +152,12 @@ public void createGUI(){
   progress_slider.setNumberFormat(G4P.DECIMAL, 2);
   progress_slider.setOpaque(false);
   progress_slider.addEventHandler(this, "progress_slider_change");
-  custom_slider2 = new GCustomSlider(MainWindow, 620, 30, 188, 40, "grey_blue");
+  custom_slider2 = new GCustomSlider(MainWindow, 630, 30, 150, 40, "grey_blue");
   custom_slider2.setLimits(0.5, 0.0, 1.0);
   custom_slider2.setNumberFormat(G4P.DECIMAL, 2);
   custom_slider2.setOpaque(false);
   custom_slider2.addEventHandler(this, "custom_slider2_change1");
-  control_buttons = new GPanel(MainWindow, 280, 80, 260, 50, "");
+  control_buttons = new GPanel(MainWindow, 260, 80, 260, 50, "");
   control_buttons.setCollapsible(false);
   control_buttons.setDraggable(false);
   control_buttons.setLocalColorScheme(GCScheme.SCHEME_8);
@@ -175,9 +175,19 @@ public void createGUI(){
   control_buttons.addControl(btn_next);
   control_buttons.addControl(btn_play_pause);
   control_buttons.addControl(btn_back);
+  duration_label = new GLabel(MainWindow, 0, 20, 600, 20);
+  duration_label.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  duration_label.setText("0 / 0");
+  duration_label.setOpaque(false);
+  volume_label = new GLabel(MainWindow, 630, 20, 150, 20);
+  volume_label.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  volume_label.setText("50%");
+  volume_label.setOpaque(false);
   controls.addControl(progress_slider);
   controls.addControl(custom_slider2);
   controls.addControl(control_buttons);
+  controls.addControl(duration_label);
+  controls.addControl(volume_label);
   visualize_window_left = new GPanel(MainWindow, 22, 22, 379, 379, "Visualization left");
   visualize_window_left.setCollapsible(false);
   visualize_window_left.setDraggable(false);
@@ -215,5 +225,7 @@ GPanel control_buttons;
 GButton btn_next; 
 GButton btn_play_pause; 
 GButton btn_back; 
+GLabel duration_label; 
+GLabel volume_label; 
 GPanel visualize_window_left; 
 GPanel visualize_window_right; 
