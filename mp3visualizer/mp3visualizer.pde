@@ -83,6 +83,7 @@ public void setCurrentSong(int songId) {
 
   //stop old currentSong
   if (currentSong != null && currentSong.isPlaying()) {
+    currentSong.jump(0);
     currentSong.stop();
   }
 
@@ -188,7 +189,17 @@ public void songlist_click(GPanel source, GEvent event) { //_CODE_:songlist:2519
 } //_CODE_:songlist:251911:
 
 public void songlist_song_click(GButton source, GEvent event) { //_CODE_:songlist_song_dummy:200550:
-  println(source.getText() + " - GButton >> GEvent." + event + " @ " + millis());
+  println(source.getText() + " >> GEvent." + event);
+  println("sddsd");
+  for (int i = 0; i < songlistButtons.length; i++) {
+    println("songlistButtonsi: " +songlistButtons[i].getText());
+    if (songlistButtons[i].getText() == source.getText()) {
+      setCurrentSong(i);
+      play();
+      set_play_pause_btn();
+      return;
+    }
+  }
 } //_CODE_:songlist_song_dummy:200550:
 
 public void debug_panel_click(GPanel source, GEvent event) { //_CODE_:debug_panel:987713:
@@ -208,8 +219,18 @@ public void controls_click(GPanel source, GEvent event) { //_CODE_:controls:3287
 } //_CODE_:controls:328727:
 
 public void progress_slider_change(GCustomSlider source, GEvent event) { //_CODE_:progress_slider:414869:
-  println("custom_slider1 - GCustomSlider >> GEvent." + event + " @ " + millis());
+  //println("custom_slider1 - GCustomSlider >> GEvent." + event + " @ " + millis());
 
+  if (event.toString() == "PRESSED") { //CLICKED
+    float percent = progress_slider.getValueF();
+
+    println("progress_slider_changed to:"+ progress_slider.getValueS() +" ("+ source.getValueF() +"%)");
+    _debug("progress_slider_changed to: currentSongDuration * percent ("+ percent +"%)");
+
+
+
+    //currentSong.jump(currentSongDuration * percent);
+  }
   //float percent = progress_slider.getValueF();
   //currentSong.jump(currentSongDuration * percent);
 } //_CODE_:progress_slider:414869:
@@ -251,19 +272,6 @@ public void visualize_window_right_click(GPanel source, GEvent event) { //_CODE_
 
 
 
-public void songlist_song_click(GPanel source, GEvent event) { //_CODE_:songlist:251911:
-  _debug(source.getText() + " >> GEvent." + event);
-  println(source.getText() + " >> GEvent." + event);
-  for (int i = 0; i < songlistButtons.length; i++) {
-    if (songlistButtons[i].getText() == source.getText()) {
-      println("i: " +i);
-      setCurrentSong(i);
-      play();
-
-      return;
-    }
-  }
-} //_CODE_:songlist:251911:
 
 
 // Use this method to add additional statements
