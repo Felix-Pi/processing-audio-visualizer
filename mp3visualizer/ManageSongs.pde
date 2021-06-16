@@ -1,4 +1,4 @@
-public void load_files() {
+public synchronized void load_files() {
   ////songlist_song_dummy.setEnabled(false);
   //songlist_song_dummy.setVisible(false);
   ////songlist_song_dummy.setEnabled(false);
@@ -12,8 +12,8 @@ public void load_files() {
   ////frames_dummy.setEnabled(false);
   //duration_dummy.setVisible(false);
   ////duration_dummy.setEnabled(false);
-  //btn_delete_file_dummy.setVisible(false);
-  ////btn_delete_file_dummy.setEnabled(false);
+  btn_delete_file_dummy.setVisible(false);
+  btn_delete_file_dummy.setEnabled(false);
 
 
   int offset = 50;
@@ -29,33 +29,30 @@ public void load_files() {
     String songName = _songFileNames.get(i);        
     SoundFile song = _songFiles.get(i);
 
-    println(i + ": " +songName);
-    println(i + ": " +song);
-
-    filename_dummy = new GLabel(ManageSongsWindow, 10, offset, 140, 20);
-    filename_dummy.setText(songName);
-    filename_dummy.setOpaque(false);
-    samplingrate_dummy = new GLabel(ManageSongsWindow, 160, offset, 100, 20);
-    samplingrate_dummy.setText(""+song.sampleRate());
-    samplingrate_dummy.setOpaque(false);
-    channels_dummy = new GLabel(ManageSongsWindow, 271, offset, 80, 20);
-    channels_dummy.setText(""+song.channels());
-    channels_dummy.setOpaque(false);
-    frames_dummy = new GLabel(ManageSongsWindow, 360, offset, 80, 20);
-    frames_dummy.setText("" + song.frames());
-    frames_dummy.setOpaque(false);
-    duration_dummy = new GLabel(ManageSongsWindow, 451, offset, 80, 20);
-    duration_dummy.setText(""+song.duration());
+    GLabel filename = new GLabel(ManageSongsWindow, filename_dummy.getX(), offset, filename_dummy.getWidth(), filename_dummy.getHeight());
+    filename.setText(songName);
+    filename.setOpaque(false);
+    GLabel samplingrate = new GLabel(ManageSongsWindow, samplingrate_dummy.getX(), offset, samplingrate_dummy.getWidth(), samplingrate_dummy.getHeight());
+    samplingrate.setText(""+song.sampleRate());
+    samplingrate.setOpaque(false);
+    GLabel channels = new GLabel(ManageSongsWindow, channels_dummy.getX(), offset, channels_dummy.getWidth(), channels_dummy.getHeight());
+    channels.setText(""+song.channels());
+    channels.setOpaque(false);
+    GLabel frames = new GLabel(ManageSongsWindow, frames_dummy.getX(), offset, frames_dummy.getWidth(), frames_dummy.getHeight());
+    frames.setText("" + song.frames());
+    frames.setOpaque(false);
+    GLabel duration = new GLabel(ManageSongsWindow, duration_dummy.getX(), offset, duration_dummy.getWidth(), duration_dummy.getHeight());
+    duration.setText(""+song.duration());
     duration_dummy.setOpaque(false);
-    btn_delete_file_dummy = new GButton(ManageSongsWindow, 540, offset, 256, 20);
-    btn_delete_file_dummy.setText("Delete " + songName);
-    btn_delete_file_dummy.addEventHandler(this, "btn_delete_song");
-    manageSongsPanel.addControl(filename_dummy);
-    manageSongsPanel.addControl(samplingrate_dummy);
-    manageSongsPanel.addControl(channels_dummy);
-    manageSongsPanel.addControl(frames_dummy);
-    manageSongsPanel.addControl(duration_dummy);
-    manageSongsPanel.addControl(btn_delete_file_dummy);
+    GButton btn_delete_file = new GButton(ManageSongsWindow, btn_delete_file_dummy.getX(), offset, btn_delete_file_dummy.getWidth(), btn_delete_file_dummy.getHeight());
+    btn_delete_file.setText("Delete " + songName);
+    btn_delete_file.addEventHandler(this, "btn_delete_file");
+    manageSongsPanel.addControl(filename);
+    manageSongsPanel.addControl(samplingrate);
+    manageSongsPanel.addControl(channels);
+    manageSongsPanel.addControl(frames);
+    manageSongsPanel.addControl(duration);
+    manageSongsPanel.addControl(btn_delete_file);
   }
 }
 

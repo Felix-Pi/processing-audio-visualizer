@@ -53,7 +53,7 @@ public ArrayList<String> load_mp3_files() {
 
 public void insert_songlist_button(String songName, int offset) {
   //add buttons to songlist
-  GButton btn_song = new GButton(MainWindow, 10, offset, 180, 20);
+  GButton btn_song = new GButton(MainWindow, songlist_song_dummy.getX(), offset, songlist_song_dummy.getWidth(), songlist_song_dummy.getHeight());
   btn_song.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
   btn_song.setText(songName);
   btn_song.addEventHandler(this, "songlist_song_click");

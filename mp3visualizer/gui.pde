@@ -36,11 +36,20 @@ public void songlist_song_click(GButton source, GEvent event) { //_CODE_:songlis
 } //_CODE_:songlist_song_dummy:200550:
 
 public void btn_manage_songs_click(GButton source, GEvent event) { //_CODE_:btn_manage_songs:731596:
-  _debug(source.getText() + ": " + event);
-  stop_playback();
-  load_files();
-  MainWindow.setVisible(false);
-  ManageSongsWindow.setVisible(true);
+
+
+  try {
+    _debug(source.getText() + ": " + event);
+    stop_playback();
+    load_files();
+
+    MainWindow.setVisible(false);
+    ManageSongsWindow.setVisible(true);
+  } 
+  catch (Exception e) { //ConcurrentModificationException doesn#t exist but is thrown sometimes?!
+    e.printStackTrace();
+    println(e);
+  }
 } //_CODE_:btn_manage_songs:731596:
 
 public void progress_slider_change(GCustomSlider source, GEvent event) { //_CODE_:progress_slider:414869:
@@ -91,18 +100,13 @@ public void panel2_Click1(GPanel source, GEvent event) { //_CODE_:loadingContent
   _debug(source.getText() + ": " + event);
 } //_CODE_:loadingContent:208910:
 
-synchronized public void win_draw3(PApplet appc, GWinData data) { //_CODE_:ManageSongsWindow:775783:
+synchronized public void DrawManageSongsWindow(PApplet appc, GWinData data) { //_CODE_:ManageSongsWindow:775783:
   appc.background(230);
 } //_CODE_:ManageSongsWindow:775783:
 
-public void panel2_Click2(GPanel source, GEvent event) { //_CODE_:manageSongsPanel:638835:
-  _debug(source.getText() + ": " + event);
-} //_CODE_:manageSongsPanel:638835:
-
-public void btn_delete_song(GButton source, GEvent event) { //_CODE_:btn_delete_file_dummy:215528:
-  boolean res = delete_file(source.getText().replace("Delete ", ""));
-  _debug(source.getText() + ": " + event + "res: " + res);
-} //_CODE_:btn_delete_file_dummy:215528:
+public void btn_delete_file(GButton source, GEvent event) { //_CODE_:btn_delete_file_dummy:951431:
+  println("btn_delete_file_dummy - GButton >> GEvent." + event + " @ " + millis());
+} //_CODE_:btn_delete_file_dummy:951431:
 
 public void btn_manageSongs_back_click(GButton source, GEvent event) { //_CODE_:btn_manageSongs_back:934174:
   _debug(source.getText() + ": " + event);
@@ -268,37 +272,35 @@ public void createGUI(){
   ManageSongsWindow = GWindow.getWindow(this, "Window title", 0, 0, 1024, 600, JAVA2D);
   ManageSongsWindow.noLoop();
   ManageSongsWindow.setActionOnClose(G4P.CLOSE_WINDOW);
-  ManageSongsWindow.addDrawHandler(this, "win_draw3");
+  ManageSongsWindow.addDrawHandler(this, "DrawManageSongsWindow");
   manageContent = new GPanel(ManageSongsWindow, 0, 0, 1030, 600, "Manage Content");
   manageContent.setCollapsible(false);
   manageContent.setDraggable(false);
   manageContent.setText("Manage Content");
   manageContent.setOpaque(true);
-  manageSongsPanel = new GPanel(ManageSongsWindow, 9, 80, 1000, 510, "Tab bar text");
+  manageSongsPanel = new GPanel(ManageSongsWindow, 10, 80, 1000, 510, "Mp3 Files");
   manageSongsPanel.setCollapsible(false);
   manageSongsPanel.setDraggable(false);
-  manageSongsPanel.setText("Tab bar text");
+  manageSongsPanel.setText("Mp3 Files");
   manageSongsPanel.setOpaque(true);
-  manageSongsPanel.addEventHandler(this, "panel2_Click2");
-  filename_dummy = new GLabel(ManageSongsWindow, 10, 40, 140, 20);
+  filename_dummy = new GLabel(ManageSongsWindow, 10, 40, 330, 20);
   filename_dummy.setText("Filename");
   filename_dummy.setOpaque(false);
-  samplingrate_dummy = new GLabel(ManageSongsWindow, 160, 40, 100, 20);
+  samplingrate_dummy = new GLabel(ManageSongsWindow, 350, 40, 100, 20);
   samplingrate_dummy.setText("SamplingRate");
   samplingrate_dummy.setOpaque(false);
-  channels_dummy = new GLabel(ManageSongsWindow, 271, 40, 80, 20);
+  channels_dummy = new GLabel(ManageSongsWindow, 460, 40, 80, 20);
   channels_dummy.setText("Channels");
   channels_dummy.setOpaque(false);
-  frames_dummy = new GLabel(ManageSongsWindow, 360, 40, 80, 20);
+  frames_dummy = new GLabel(ManageSongsWindow, 550, 40, 80, 20);
   frames_dummy.setText("Frames");
   frames_dummy.setOpaque(false);
-  duration_dummy = new GLabel(ManageSongsWindow, 451, 40, 80, 20);
+  duration_dummy = new GLabel(ManageSongsWindow, 640, 40, 80, 20);
   duration_dummy.setText("Duration");
   duration_dummy.setOpaque(false);
-  btn_delete_file_dummy = new GButton(ManageSongsWindow, 540, 40, 256, 20);
-  btn_delete_file_dummy.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
+  btn_delete_file_dummy = new GButton(ManageSongsWindow, 770, 40, 230, 20);
   btn_delete_file_dummy.setText("Face text");
-  btn_delete_file_dummy.addEventHandler(this, "btn_delete_song");
+  btn_delete_file_dummy.addEventHandler(this, "btn_delete_file");
   manageSongsPanel.addControl(filename_dummy);
   manageSongsPanel.addControl(samplingrate_dummy);
   manageSongsPanel.addControl(channels_dummy);
