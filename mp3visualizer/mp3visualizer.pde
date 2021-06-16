@@ -107,7 +107,6 @@ public void setCurrentSong(int songId) {
   }
 
 
-
   //set new currentSong
   currentSong = songFiles.get(songId);
   currentSongId = songId;
