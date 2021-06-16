@@ -52,26 +52,6 @@ public void btn_manage_songs_click(GButton source, GEvent event) { //_CODE_:btn_
   }
 } //_CODE_:btn_manage_songs:731596:
 
-public void progress_slider_change(GCustomSlider source, GEvent event) { //_CODE_:progress_slider:414869:
-  //println("custom_slider1 - GCustomSlider >> GEvent." + event);
-
-  if (event.toString() == "PRESSED") { //CLICKED
-    float percent = progress_slider.getValueF();
-
-    _debug(source + ": " + event);
-
-
-
-    //currentSong.jump(currentSongDuration * percent);
-  }
-  //float percent = progress_slider.getValueF();
-  //currentSong.jump(currentSongDuration * percent);
-} //_CODE_:progress_slider:414869:
-
-public void volume_slider_change(GCustomSlider source, GEvent event) { //_CODE_:volume_slider:442201:
-  _debug(source + ": " + event);
-} //_CODE_:volume_slider:442201:
-
 public void btn_next_click(GButton source, GEvent event) { //_CODE_:btn_next:452556:
   _debug(source.getText() + ": " + event);
   next();
@@ -91,6 +71,56 @@ public void btn_stop_click(GButton source, GEvent event) { //_CODE_:btn_stop:231
   _debug(source.getText() + ": " + event);
   stop_playback();
 } //_CODE_:btn_stop:231338:
+
+public void progress_slider_change(GSlider source, GEvent event) { //_CODE_:progress_slider:519365:
+  _debug("progress_slider_change: " + source + ": " + event + "=" + source.getValueF() + "state:" + progress_slider_pressed);
+  Float newValue;
+
+  if (event.toString() == "PRESSED") {
+    progress_slider_pressed = true;
+    println("Pressed: " + source.getValueF());
+  }
+  if (event.toString() == "RELEASED") {
+    progress_slider_pressed = false;
+  }
+
+  //click / double click
+  if (progress_slider_prevEvent == "CLICKED" && event.toString() == "VALUE_STEADY") {
+    newValue = source.getValueF();
+    currentSong.jump(newValue);
+
+    progress_slider_pressed = false;
+    updateDurationLabel();
+    _debug("CLick / DoubleClick detected: newValue=" + newValue);
+  }
+
+
+  //drag
+  if (progress_slider_prevEvent == "VALUE_STEADY" && event.toString() == "RELEASED") {
+    newValue = progress_slider_prevValue;
+    currentSong.jump(newValue);
+
+    progress_slider_pressed = false;
+    updateDurationLabel();
+    _debug("Drag detected: newValue=" + newValue);
+  }
+
+  progress_slider_prevEvent = event.toString();
+  progress_slider_prevValue = source.getValueF();
+} //_CODE_:progress_slider:519365:
+
+public void volume_slider_chang(GSlider source, GEvent event) { //_CODE_:volume_slider:208684:
+  _debug(source + ": " + event + "=" + source.getValueF());
+
+  currentSong.amp( source.getValueF());
+  volume_label.setText(nf(source.getValueF() * 100, 0, 2) + "%");
+} //_CODE_:volume_slider:208684:
+
+public void speed_slider_change(GSlider source, GEvent event) { //_CODE_:speed_slider:986531:
+  _debug(source + ": " + event + "=" + source.getValueF());
+  speed_label.setText("x" + nf(source.getValueF(), 0, 2));
+  currentSong.rate(source.getValueF());
+} //_CODE_:speed_slider:986531:
 
 synchronized public void win_draw2(PApplet appc, GWinData data) { //_CODE_:LoadingWindow:962587:
   appc.background(230);
@@ -170,23 +200,13 @@ public void createGUI(){
   content_window.setText("Tab bar text");
   content_window.setLocalColorScheme(GCScheme.SCHEME_8);
   content_window.setOpaque(false);
-  controls = new GPanel(MainWindow, 20, 410, 780, 130, "Controls");
+  controls = new GPanel(MainWindow, 0, 410, 800, 130, "Controls");
   controls.setCollapsible(false);
   controls.setDraggable(false);
   controls.setText("Controls");
   controls.setLocalColorScheme(GCScheme.SCHEME_8);
   controls.setOpaque(false);
-  progress_slider = new GCustomSlider(MainWindow, 0, 30, 600, 40, "grey_blue");
-  progress_slider.setLimits(0.0, 0.0, 1.0);
-  progress_slider.setNumberFormat(G4P.DECIMAL, 2);
-  progress_slider.setOpaque(false);
-  progress_slider.addEventHandler(this, "progress_slider_change");
-  volume_slider = new GCustomSlider(MainWindow, 630, 30, 150, 40, "grey_blue");
-  volume_slider.setLimits(0.5, 0.0, 1.0);
-  volume_slider.setNumberFormat(G4P.DECIMAL, 2);
-  volume_slider.setOpaque(false);
-  volume_slider.addEventHandler(this, "volume_slider_change");
-  control_buttons = new GPanel(MainWindow, 260, 80, 520, 50, "");
+  control_buttons = new GPanel(MainWindow, 280, 90, 520, 50, "");
   control_buttons.setCollapsible(false);
   control_buttons.setDraggable(false);
   control_buttons.setLocalColorScheme(GCScheme.SCHEME_8);
@@ -200,26 +220,41 @@ public void createGUI(){
   btn_back = new GButton(MainWindow, 0, 10, 80, 30);
   btn_back.setText("back");
   btn_back.addEventHandler(this, "btn_back_click");
-  btn_stop = new GButton(MainWindow, 430, 10, 80, 30);
+  btn_stop = new GButton(MainWindow, 420, 10, 80, 30);
   btn_stop.setText("Stop");
   btn_stop.addEventHandler(this, "btn_stop_click");
   control_buttons.addControl(btn_next);
   control_buttons.addControl(btn_play_pause);
   control_buttons.addControl(btn_back);
   control_buttons.addControl(btn_stop);
-  duration_label = new GLabel(MainWindow, 0, 20, 600, 20);
+  duration_label = new GLabel(MainWindow, 190, 10, 450, 20);
   duration_label.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   duration_label.setText("0 / 0");
   duration_label.setOpaque(false);
-  volume_label = new GLabel(MainWindow, 630, 20, 150, 20);
+  volume_label = new GLabel(MainWindow, 650, 10, 150, 20);
   volume_label.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   volume_label.setText("50%");
   volume_label.setOpaque(false);
-  controls.addControl(progress_slider);
-  controls.addControl(volume_slider);
+  progress_slider = new GSlider(MainWindow, 190, 40, 450, 40, 10.0);
+  progress_slider.setLimits(0.0, 0.0, 1.0);
+  progress_slider.setNumberFormat(G4P.DECIMAL, 2);
+  progress_slider.setOpaque(false);
+  progress_slider.addEventHandler(this, "progress_slider_change");
+  volume_slider = new GSlider(MainWindow, 650, 40, 150, 40, 10.0);
+  volume_slider.setLimits(0.5, 0.0, 1.0);
+  volume_slider.setNumberFormat(G4P.DECIMAL, 2);
+  volume_slider.setOpaque(false);
+  volume_slider.addEventHandler(this, "volume_slider_chang");
+  speed_label = new GLabel(MainWindow, 20, 10, 150, 20);
+  speed_label.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  speed_label.setText("x1");
+  speed_label.setOpaque(false);
   controls.addControl(control_buttons);
   controls.addControl(duration_label);
   controls.addControl(volume_label);
+  controls.addControl(progress_slider);
+  controls.addControl(volume_slider);
+  controls.addControl(speed_label);
   visualize_window_left = new GPanel(MainWindow, 22, 22, 379, 379, "Visualization left");
   visualize_window_left.setCollapsible(false);
   visualize_window_left.setDraggable(false);
@@ -230,9 +265,15 @@ public void createGUI(){
   visualize_window_right.setDraggable(false);
   visualize_window_right.setText("Visualization right");
   visualize_window_right.setOpaque(true);
+  speed_slider = new GSlider(MainWindow, 20, 450, 150, 40, 10.0);
+  speed_slider.setLimits(1.0, 0.5, 2.0);
+  speed_slider.setNumberFormat(G4P.DECIMAL, 2);
+  speed_slider.setOpaque(false);
+  speed_slider.addEventHandler(this, "speed_slider_change");
   content_window.addControl(controls);
   content_window.addControl(visualize_window_left);
   content_window.addControl(visualize_window_right);
+  content_window.addControl(speed_slider);
   debug_panel = new GPanel(MainWindow, 300, 610, 800, 20, "Tab bar text");
   debug_panel.setCollapsible(false);
   debug_panel.setDraggable(false);
@@ -333,8 +374,6 @@ GLabel song_title;
 GButton btn_manage_songs; 
 GPanel content_window; 
 GPanel controls; 
-GCustomSlider progress_slider; 
-GCustomSlider volume_slider; 
 GPanel control_buttons; 
 GButton btn_next; 
 GButton btn_play_pause; 
@@ -342,8 +381,12 @@ GButton btn_back;
 GButton btn_stop; 
 GLabel duration_label; 
 GLabel volume_label; 
+GSlider progress_slider; 
+GSlider volume_slider; 
+GLabel speed_label; 
 GPanel visualize_window_left; 
 GPanel visualize_window_right; 
+GSlider speed_slider; 
 GPanel debug_panel; 
 GLabel debug_label; 
 GWindow LoadingWindow;

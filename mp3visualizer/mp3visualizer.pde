@@ -12,6 +12,9 @@ SoundFile currentSong;
 public int currentSongId = 0;
 public float currentSongDuration = 0;
 
+public String progress_slider_prevEvent;
+public Float progress_slider_prevValue;
+public boolean progress_slider_pressed = false;
 
 public void setup() {
   createGUI();
@@ -119,8 +122,8 @@ public void setCurrentSong(int songId) {
 
   //set progress slider ticks
   progress_slider.setLimits(0, currentSongDuration);
-  
-  
+
+
   //mark active song
   for (int i = 0; i < songlistButtons.size(); i++) {
     songlistButtons.get(i).setTextPlain();
@@ -191,9 +194,10 @@ public void back() {
 }
 
 public void updateDurationLabel() {
-  if (currentSong.isPlaying()) {
-    duration_label.setText(nf(currentSong.percent(), 0, 2) + " / " + nf(currentSongDuration, 0, 2)); 
-    progress_slider.setValue(currentSong.percent() * 0.01f);
+  if (currentSong.isPlaying() && !progress_slider_pressed) {
+    duration_label.setText(nf(currentSong.position(), 0, 2) + " / " + nf(currentSongDuration, 0, 2)); 
+    //progress_slider.setValue(currentSong.percent() * 0.01f);
+    progress_slider.setValue(currentSong.position());
   }
 }
 
