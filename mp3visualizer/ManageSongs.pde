@@ -17,11 +17,20 @@ public void load_files() {
 
 
   int offset = 50;
-  for (int i = 0; i < songFiles.size(); i++) {
+  ArrayList<String> _songFileNames = new ArrayList<String>(songFileNames);
+  ArrayList<SoundFile> _songFiles = new ArrayList<SoundFile>(songFiles);
+  
+  println(_songFileNames);
+  println(_songFiles);
+  for (int i = 0; i < _songFileNames.size(); i++) {
+    
     offset += 30;
 
-    String songName = songFileNames.get(i);        
-    SoundFile song = songFiles.get(i);
+    String songName = _songFileNames.get(i);        
+    SoundFile song = _songFiles.get(i);
+
+    println(i + ": " +songName);
+    println(i + ": " +song);
 
     filename_dummy = new GLabel(ManageSongsWindow, 10, offset, 140, 20);
     filename_dummy.setText(songName);
@@ -40,7 +49,7 @@ public void load_files() {
     duration_dummy.setOpaque(false);
     btn_delete_file_dummy = new GButton(ManageSongsWindow, 540, offset, 256, 20);
     btn_delete_file_dummy.setText("Delete " + songName);
-    btn_delete_file_dummy.addEventHandler(this, "button1_click1");
+    btn_delete_file_dummy.addEventHandler(this, "btn_delete_song");
     manageSongsPanel.addControl(filename_dummy);
     manageSongsPanel.addControl(samplingrate_dummy);
     manageSongsPanel.addControl(channels_dummy);
@@ -48,4 +57,14 @@ public void load_files() {
     manageSongsPanel.addControl(duration_dummy);
     manageSongsPanel.addControl(btn_delete_file_dummy);
   }
+}
+
+public boolean delete_file(String fileName) {
+  print("delete:" + fileName);
+  File f = new File(dataPath("/data/" + fileName));
+  if (f.exists()) {
+    f.delete();
+  }
+
+  return f.exists();
 }

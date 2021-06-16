@@ -97,9 +97,16 @@ public void setCurrentSong(int songId) {
   }
 
   //stop old currentSong
-  if (currentSong != null && currentSong.isPlaying()) {
-    currentSong.stop();
+  if (currentSong != null) {
+    if (currentSong.isPlaying()) {
+      currentSong.stop();
+    }
+    if (currentSongId != songId) {
+      currentSong.stop();
+    }
   }
+
+
 
   //set new currentSong
   currentSong = songFiles.get(songId);
@@ -150,6 +157,12 @@ public void play_pause() {
   }
 }
 
+public void stop_playback() {
+  if (currentSong != null && currentSong.isPlaying()) {
+    currentSong.stop();
+  }
+}
+
 public void next() {
   if (currentSongId < songFiles.size()) {
     currentSongId +=1;
@@ -183,7 +196,9 @@ public void updateDurationLabel() {
 
 /* DEBUG */
 public void _debug(String msg) {
-  debug_label.setText("Debug: " + msg);
+  if (debug_label != null) {
+    debug_label.setText("Debug: " + msg);
+  }
   println(msg);
 }
 
