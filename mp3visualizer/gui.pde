@@ -125,7 +125,7 @@ public void speed_slider_change(GSlider source, GEvent event) { //_CODE_:speed_s
   currentSong.rate(source.getValueF());
 } //_CODE_:speed_slider:986531:
 
-synchronized public void win_draw2(PApplet appc, GWinData data) { //_CODE_:LoadingWindow:962587:
+synchronized public void LoadingWindowDraw(PApplet appc, GWinData data) { //_CODE_:LoadingWindow:962587:
   appc.background(230);
 } //_CODE_:LoadingWindow:962587:
 
@@ -206,7 +206,7 @@ public void createGUI(){
   main_menu.setCollapsible(false);
   main_menu.setDraggable(false);
   main_menu.setOpaque(true);
-  song_title = new GLabel(MainWindow, 0, 30, 150, 30);
+  song_title = new GLabel(MainWindow, 0, 30, 400, 30);
   song_title.setTextAlign(GAlign.LEFT, GAlign.LEFT);
   song_title.setText("Current Song");
   song_title.setOpaque(false);
@@ -310,7 +310,7 @@ public void createGUI(){
   LoadingWindow = GWindow.getWindow(this, "Loading Window", 0, 0, 1120, 600, JAVA2D);
   LoadingWindow.noLoop();
   LoadingWindow.setActionOnClose(G4P.KEEP_OPEN);
-  LoadingWindow.addDrawHandler(this, "win_draw2");
+  LoadingWindow.addDrawHandler(this, "LoadingWindowDraw");
   loadingContent = new GPanel(LoadingWindow, 0, 0, 1120, 600, "");
   loadingContent.setCollapsible(false);
   loadingContent.setDraggable(false);

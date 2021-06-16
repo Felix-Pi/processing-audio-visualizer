@@ -11,7 +11,6 @@ public synchronized void load_files() {
 
   int offset = 50;
 
-
   for (int i = 0; i < _songFileNames.size(); i++) {
 
     offset += 30;
