@@ -50,6 +50,11 @@ public void btn_manage_songs_click(GButton source, GEvent event) { //_CODE_:btn_
   }
 } //_CODE_:btn_manage_songs:731596:
 
+public void btn_add_file_main_click(GButton source, GEvent event) { //_CODE_:btn_add_file_main:457562:
+  _debug(source.getText() + ": " + event);
+  selectInput("Select a file to process:", "uploadFile");
+} //_CODE_:btn_add_file_main:457562:
+
 public void btn_next_click(GButton source, GEvent event) { //_CODE_:btn_next:452556:
   _debug(source.getText() + ": " + event);
   next();
@@ -71,7 +76,7 @@ public void btn_stop_click(GButton source, GEvent event) { //_CODE_:btn_stop:231
 } //_CODE_:btn_stop:231338:
 
 public void progress_slider_change(GSlider source, GEvent event) { //_CODE_:progress_slider:519365:
-  _debug("progress_slider_change: " + source + ": " + event + "=" + source.getValueF() + "state:" + progress_slider_pressed);
+  //_debug("progress_slider_change: " + source + ": " + event + "=" + source.getValueF() + "state:" + progress_slider_pressed);
   Float newValue;
 
   if (event.toString() == "PRESSED") {
@@ -138,17 +143,18 @@ public void btn_delete_file(GButton source, GEvent event) { //_CODE_:btn_delete_
   boolean result = delete_file(source.getText().replace("Delete ", ""));
   if (result) {
     G4P.showMessage(this, "Successfully deleted File!", "INFO", 1);
+    redrawManagement();
     return;
   }
   G4P.showMessage(this, "An error occured!", "INFO", 1);
-  println("deleted: " + result);
 } //_CODE_:btn_delete_file_dummy:951431:
 
 public void btn_manageSongs_back_click(GButton source, GEvent event) { //_CODE_:btn_manageSongs_back:934174:
   _debug(source.getText() + ": " + event);
-  G4P.showMessage(this, "Please Upload at least 1 mp3 file!", "INFO", 1);
   if (countUploadedMp3Files() == 0) {
+    G4P.showMessage(this, "Please Upload at least 1 mp3 file!", "INFO", 1);
     selectInput("Select a file to process:", "uploadFile");
+    redrawManagement();
     return;
   }
 
@@ -159,6 +165,7 @@ public void btn_manageSongs_back_click(GButton source, GEvent event) { //_CODE_:
 public void btn_add_file_click(GButton source, GEvent event) { //_CODE_:btn_add_file:567298:
   _debug(source.getText() + ": " + event);
   selectInput("Select a file to process:", "uploadFile");
+  redrawManagement();
 } //_CODE_:btn_add_file:567298:
 
 
@@ -206,8 +213,12 @@ public void createGUI(){
   btn_manage_songs = new GButton(MainWindow, 680, 30, 120, 30);
   btn_manage_songs.setText("ManageSongs");
   btn_manage_songs.addEventHandler(this, "btn_manage_songs_click");
+  btn_add_file_main = new GButton(MainWindow, 520, 30, 140, 30);
+  btn_add_file_main.setText("Add File");
+  btn_add_file_main.addEventHandler(this, "btn_add_file_main_click");
   main_menu.addControl(song_title);
   main_menu.addControl(btn_manage_songs);
+  main_menu.addControl(btn_add_file_main);
   content_window = new GPanel(MainWindow, 300, 50, 824, 550, "Tab bar text");
   content_window.setCollapsible(false);
   content_window.setDraggable(false);
@@ -386,6 +397,7 @@ GButton songlist_song_dummy;
 GPanel main_menu; 
 GLabel song_title; 
 GButton btn_manage_songs; 
+GButton btn_add_file_main; 
 GPanel content_window; 
 GPanel controls; 
 GPanel control_buttons; 

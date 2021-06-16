@@ -4,11 +4,11 @@ import processing.sound.*;
 
 //domain logic
 public boolean songlistLoaded = false; 
-public ArrayList<String> songFileNames;
-public ArrayList<SoundFile> songFiles;
+public volatile ArrayList<String> songFileNames;
+public volatile ArrayList<SoundFile> songFiles;
 public ArrayList<GButton> songlistButtons;
 
-SoundFile currentSong;
+public volatile SoundFile currentSong;
 public int currentSongId = 0;
 public float currentSongDuration = 0;
 

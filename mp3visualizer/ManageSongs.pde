@@ -1,30 +1,17 @@
-public boolean inputWinowIsOpen = false;
-
+public ArrayList<GTextIconBase> managementItemHolder;
 
 public synchronized void load_files() {
-  ////songlist_song_dummy.setEnabled(false);
-  //songlist_song_dummy.setVisible(false);
-  ////songlist_song_dummy.setEnabled(false);
-  //filename_dummy.setVisible(false);
-  ////filename_dummy.setEnabled(false);
-  //samplingrate_dummy.setVisible(false);
-  ////samplingrate_dummy.setEnabled(false);
-  //encoding_dummy.setVisible(false);
-  ////encoding_dummy.setEnabled(false);
-  //frames_dummy.setVisible(false);
-  ////frames_dummy.setEnabled(false);
-  //duration_dummy.setVisible(false);
-  ////duration_dummy.setEnabled(false);
   btn_delete_file_dummy.setVisible(false);
   btn_delete_file_dummy.setEnabled(false);
 
+  managementItemHolder = new ArrayList<GTextIconBase>();
 
-  int offset = 50;
   ArrayList<String> _songFileNames = new ArrayList<String>(songFileNames);
   ArrayList<SoundFile> _songFiles = new ArrayList<SoundFile>(songFiles);
 
-  println(_songFileNames);
-  println(_songFiles);
+  int offset = 50;
+
+
   for (int i = 0; i < _songFileNames.size(); i++) {
 
     offset += 30;
@@ -50,13 +37,29 @@ public synchronized void load_files() {
     GButton btn_delete_file = new GButton(ManageSongsWindow, btn_delete_file_dummy.getX(), offset, btn_delete_file_dummy.getWidth(), btn_delete_file_dummy.getHeight());
     btn_delete_file.setText("Delete " + songName);
     btn_delete_file.addEventHandler(this, "btn_delete_file");
-    manageSongsPanel.addControl(filename);
-    manageSongsPanel.addControl(samplingrate);
-    manageSongsPanel.addControl(channels);
-    manageSongsPanel.addControl(frames);
-    manageSongsPanel.addControl(duration);
-    manageSongsPanel.addControl(btn_delete_file);
+
+    managementItemHolder.add(filename);
+    managementItemHolder.add(samplingrate);
+    managementItemHolder.add(channels);
+    managementItemHolder.add(frames);
+    managementItemHolder.add(duration);
+    managementItemHolder.add(btn_delete_file);
   }
+
+  for (GTextIconBase elem : managementItemHolder) {
+    manageSongsPanel.addControl(elem);
+  }
+}
+
+public void redrawManagement() {
+  for (GTextIconBase elem : managementItemHolder) {
+    elem.setVisible(false);
+    elem.setEnabled(false);
+    elem.dispose();
+  }
+
+  ManageSongsWindow.redraw();
+  load_files();
 }
 
 public boolean delete_file(String fileName) {
@@ -86,13 +89,13 @@ boolean uploadFile(File selection) {
       File newFile = new File (path);
 
       selection.renameTo(newFile);
-      inputWinowIsOpen = false;
 
+      load_songlist();
+      redraw();
       G4P.showMessage(this, "Successfully uploaded '"+ selection.getName() +"'", "INFO", 1);
       return true;
     } 
 
-    inputWinowIsOpen = false;
 
     G4P.showMessage(this, "Please select a MP3 File!", "INFO", 1);
   }
