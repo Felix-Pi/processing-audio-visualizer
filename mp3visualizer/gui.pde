@@ -19,14 +19,14 @@ synchronized public void EXIT_APP(PApplet appc, GWinData data) { //_CODE_:MainWi
 } //_CODE_:MainWindow:473482:
 
 public void songlist_click(GPanel source, GEvent event) { //_CODE_:songlist:251911:
-  _debug(source.getText() + ": " + event + " @ " + millis());
+  _debug(source.getText() + ": " + event);
 } //_CODE_:songlist:251911:
 
 public void songlist_song_click(GButton source, GEvent event) { //_CODE_:songlist_song_dummy:200550:
-  _debug(source.getText() + ": " + event + " @ " + millis());
+  _debug(source.getText() + ": " + event);
 
-  for (int i = 0; i < songlistButtons.length; i++) {
-    if (songlistButtons[i].getText() == source.getText()) {
+  for (int i = 0; i < songlistButtons.size(); i++) {
+    if (songlistButtons.get(i).getText() == source.getText()) {
       setCurrentSong(i);
       play();
       set_play_pause_btn();
@@ -36,19 +36,19 @@ public void songlist_song_click(GButton source, GEvent event) { //_CODE_:songlis
 } //_CODE_:songlist_song_dummy:200550:
 
 public void btn_manage_songs_click(GButton source, GEvent event) { //_CODE_:btn_manage_songs:731596:
-  _debug(source.getText() + ": " + event + " @ " + millis());
+  _debug(source.getText() + ": " + event);
   load_files();
   MainWindow.setVisible(false);
   ManageSongsWindow.setVisible(true);
 } //_CODE_:btn_manage_songs:731596:
 
 public void progress_slider_change(GCustomSlider source, GEvent event) { //_CODE_:progress_slider:414869:
-  //println("custom_slider1 - GCustomSlider >> GEvent." + event + " @ " + millis());
+  //println("custom_slider1 - GCustomSlider >> GEvent." + event);
 
   if (event.toString() == "PRESSED") { //CLICKED
     float percent = progress_slider.getValueF();
 
-    _debug(source + ": " + event + " @ " + millis());
+    _debug(source + ": " + event);
 
 
 
@@ -59,11 +59,11 @@ public void progress_slider_change(GCustomSlider source, GEvent event) { //_CODE
 } //_CODE_:progress_slider:414869:
 
 public void volume_slider_change(GCustomSlider source, GEvent event) { //_CODE_:volume_slider:442201:
-  _debug(source + ": " + event + " @ " + millis());
+  _debug(source + ": " + event);
 } //_CODE_:volume_slider:442201:
 
 public void btn_next_click(GButton source, GEvent event) { //_CODE_:btn_next:452556:
-  _debug(source.getText() + ": " + event + " @ " + millis());
+  _debug(source.getText() + ": " + event);
   next();
 } //_CODE_:btn_next:452556:
 
@@ -73,7 +73,7 @@ public void btn_play_pause_click(GButton source, GEvent event) { //_CODE_:btn_pl
 } //_CODE_:btn_play_pause:854686:
 
 public void btn_back_click(GButton source, GEvent event) { //_CODE_:btn_back:786194:
-  _debug(source.getText() + ": " + event + " @ " + millis());
+  _debug(source.getText() + ": " + event);
   back();
 } //_CODE_:btn_back:786194:
 
@@ -82,7 +82,7 @@ synchronized public void win_draw2(PApplet appc, GWinData data) { //_CODE_:Loadi
 } //_CODE_:LoadingWindow:962587:
 
 public void panel2_Click1(GPanel source, GEvent event) { //_CODE_:loadingContent:208910:
-  _debug(source.getText() + ": " + event + " @ " + millis());
+  _debug(source.getText() + ": " + event);
 } //_CODE_:loadingContent:208910:
 
 synchronized public void win_draw3(PApplet appc, GWinData data) { //_CODE_:ManageSongsWindow:775783:
@@ -90,21 +90,21 @@ synchronized public void win_draw3(PApplet appc, GWinData data) { //_CODE_:Manag
 } //_CODE_:ManageSongsWindow:775783:
 
 public void panel2_Click2(GPanel source, GEvent event) { //_CODE_:manageSongsPanel:638835:
-  _debug(source.getText() + ": " + event + " @ " + millis());
+  _debug(source.getText() + ": " + event);
 } //_CODE_:manageSongsPanel:638835:
 
 public void button1_click1(GButton source, GEvent event) { //_CODE_:btn_delete_file_dummy:215528:
-  _debug(source.getText() + ": " + event + " @ " + millis());
+  _debug(source.getText() + ": " + event);
 } //_CODE_:btn_delete_file_dummy:215528:
 
 public void btn_manageSongs_back_click(GButton source, GEvent event) { //_CODE_:btn_manageSongs_back:934174:
-  _debug(source.getText() + ": " + event + " @ " + millis());
+  _debug(source.getText() + ": " + event);
   MainWindow.setVisible(true);
   ManageSongsWindow.setVisible(false);
 } //_CODE_:btn_manageSongs_back:934174:
 
 public void btn_add_file_click(GButton source, GEvent event) { //_CODE_:btn_add_file:567298:
-  _debug(source.getText() + ": " + event + " @ " + millis());
+  _debug(source.getText() + ": " + event);
 } //_CODE_:btn_add_file:567298:
 
 

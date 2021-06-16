@@ -4,9 +4,9 @@ import processing.sound.*;
 
 //domain logic
 public boolean songlistLoaded = false; 
-public String[] songFileNames;
-public SoundFile[] songFiles;
-public GButton[] songlistButtons;
+public ArrayList<String> songFileNames;
+public ArrayList<SoundFile> songFiles;
+public ArrayList<GButton> songlistButtons;
 
 SoundFile currentSong;
 public int currentSongId = 0;
@@ -34,46 +34,56 @@ public void draw() {
   }
 }
 
+public ArrayList<String> load_mp3_files() {
+  ArrayList<String> result = new ArrayList<String>(); 
+
+  String path = sketchPath() + "/data/";
+  File file = new File(path);
+  String[] files = file.list();
+
+  for (int i = 0; i < files.length; i++) {
+    if (files[i].contains(".mp3")) {
+      result.add(files[i]);
+    }
+  }
+
+  return result;
+}
+
+
+public void insert_songlist_button(String songName, int offset) {
+  //add buttons to songlist
+  GButton btn_song = new GButton(MainWindow, 10, offset, 180, 20);
+  btn_song.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
+  btn_song.setText(songName);
+  btn_song.addEventHandler(this, "songlist_song_click");
+  songlist.addControl(btn_song);
+
+  //fill file wrappers
+  songlistButtons.add(btn_song);
+}
+
 public void load_songlist() {
   //disable dummy button (appearently needed for handler creation)
   songlist_song_dummy.setEnabled(false);
   songlist_song_dummy.setVisible(false);
 
-  //load songfiles from /data/
-  String path = sketchPath() + "/data/";
-  File file = new File(path);
-  String[] files = file.list();
+  songFileNames = load_mp3_files();
+  songFiles =new ArrayList<SoundFile>();
+  songlistButtons = new ArrayList<GButton>();
 
-  songlistButtons = new GButton[files.length];
-  songFileNames = new String[files.length];
-  songFiles = new SoundFile[files.length];
-
-
-  loading_slider.setLimits(0, files.length);
+  loading_slider.setLimits(0, songFileNames.size());
 
   int offset = 0;
-  for (int i = 0; i < files.length; i++) {
+  for (int i = 0; i < songFileNames.size(); i++) {
     offset += 30;
 
-    String songName = files[i];        
+    String songName = songFileNames.get(i);        
 
-    //loading screen
-    loading_amount.setText((i + 1) + "/" + files.length);
-    loading_file.setText(songName);
-    loading_slider.setValue(i + 1);
+    setProgress(i + 1, songFileNames.size(), songName);
+    insert_songlist_button(songName, offset);
 
-
-    //add buttons to songlist
-    GButton btn_song = new GButton(MainWindow, 10, offset, 180, 20);
-    btn_song.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
-    btn_song.setText(songName);
-    btn_song.addEventHandler(this, "songlist_song_click");
-    songlist.addControl(btn_song);
-
-    //fill file wrappers
-    songlistButtons[i] = btn_song;
-    songFileNames[i] = songName;
-    songFiles[i] = new SoundFile(this, songName);
+    songFiles.add(new SoundFile(this, songName));
   }
 
   setCurrentSong(currentSongId);
@@ -82,7 +92,7 @@ public void load_songlist() {
 
 /* processing sound stuff */
 public void setCurrentSong(int songId) {
-  if (songId < 0 || songId > songFileNames.length - 1) {
+  if (songId < 0 || songId > songFileNames.size() - 1) {
     return;
   }
 
@@ -92,20 +102,20 @@ public void setCurrentSong(int songId) {
   }
 
   //set new currentSong
-  currentSong = songFiles[songId];
+  currentSong = songFiles.get(songId);
   currentSongId = songId;
 
   //set song_title value
-  song_title.setText(songFileNames[songId].replace(".mp3", ""));
+  song_title.setText(songFileNames.get(songId).replace(".mp3", ""));
 
   //set currentSongDuration
   currentSongDuration = currentSong.duration();
 
   //mark active song
-  for (int i = 0; i < songlistButtons.length; i++) {
-    songlistButtons[i].setTextPlain();
+  for (int i = 0; i < songlistButtons.size(); i++) {
+    songlistButtons.get(i).setTextPlain();
   }
-  songlistButtons[currentSongId].setTextBold();
+  songlistButtons.get(currentSongId).setTextBold();
 }
 
 
@@ -119,7 +129,7 @@ public void pause() {
   //todo check if playing
   if (currentSong.isPlaying()) {
     currentSong.pause();
-    songlistButtons[currentSongId].setTextBold();
+    songlistButtons.get(currentSongId).setTextBold();
   }
 }
 
@@ -141,7 +151,7 @@ public void play_pause() {
 }
 
 public void next() {
-  if (currentSongId < songFiles.length) {
+  if (currentSongId < songFiles.size()) {
     currentSongId +=1;
   } else {
     currentSongId = 0;
@@ -156,7 +166,7 @@ public void back() {
   if (currentSongId > 0) {
     currentSongId -=1;
   } else {
-    currentSongId = songFiles.length - 1;
+    currentSongId = songFiles.size() - 1;
   }
 
   setCurrentSong(currentSongId);
@@ -174,6 +184,7 @@ public void updateDurationLabel() {
 /* DEBUG */
 public void _debug(String msg) {
   debug_label.setText("Debug: " + msg);
+  println(msg);
 }
 
 

@@ -17,11 +17,11 @@ public void load_files() {
 
 
   int offset = 50;
-  for (int i = 0; i < songFiles.length; i++) {
+  for (int i = 0; i < songFiles.size(); i++) {
     offset += 30;
 
-    String songName = songFileNames[i];        
-    SoundFile song = songFiles[i];
+    String songName = songFileNames.get(i);        
+    SoundFile song = songFiles.get(i);
 
     filename_dummy = new GLabel(ManageSongsWindow, 10, offset, 140, 20);
     filename_dummy.setText(songName);
