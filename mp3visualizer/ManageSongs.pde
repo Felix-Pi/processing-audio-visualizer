@@ -19,11 +19,11 @@ public synchronized void load_files() {
   int offset = 50;
   ArrayList<String> _songFileNames = new ArrayList<String>(songFileNames);
   ArrayList<SoundFile> _songFiles = new ArrayList<SoundFile>(songFiles);
-  
+
   println(_songFileNames);
   println(_songFiles);
   for (int i = 0; i < _songFileNames.size(); i++) {
-    
+
     offset += 30;
 
     String songName = _songFileNames.get(i);        
@@ -57,11 +57,30 @@ public synchronized void load_files() {
 }
 
 public boolean delete_file(String fileName) {
-  print("delete:" + fileName);
-  File f = new File(dataPath("/data/" + fileName));
-  if (f.exists()) {
+  println("delete:" + fileName);
+  String path = sketchPath() + "/data/";
+
+  File f = new File(dataPath(path + fileName));
+  boolean exists = f.exists();
+  if (exists) {
     f.delete();
   }
 
-  return f.exists();
+  return exists;
+}
+
+
+void uploadFile(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    println("User selected " + selection.getAbsolutePath());
+    print(selection.getName());
+      
+      String path = sketchPath() + "/data/" + selection.getName();
+      File newFile = new File (path);
+
+      selection.renameTo(newFile);  
+    
+  }
 }

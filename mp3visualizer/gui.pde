@@ -22,7 +22,7 @@ public void songlist_click(GPanel source, GEvent event) { //_CODE_:songlist:2519
   _debug(source.getText() + ": " + event);
 } //_CODE_:songlist:251911:
 
-public void songlist_song_click(GButton source, GEvent event) { //_CODE_:songlist_song_dummy:200550:
+public void CENTER(GButton source, GEvent event) { //_CODE_:songlist_song_dummy:200550:
   _debug(source.getText() + ": " + event);
 
   for (int i = 0; i < songlistButtons.size(); i++) {
@@ -135,7 +135,10 @@ synchronized public void DrawManageSongsWindow(PApplet appc, GWinData data) { //
 } //_CODE_:ManageSongsWindow:775783:
 
 public void btn_delete_file(GButton source, GEvent event) { //_CODE_:btn_delete_file_dummy:951431:
-  println("btn_delete_file_dummy - GButton >> GEvent." + event + " @ " + millis());
+  _debug(source.getText() + ": " + event);
+  
+  boolean result = delete_file(source.getText().replace("Delete ", ""));
+  println("deleted: " + result);
 } //_CODE_:btn_delete_file_dummy:951431:
 
 public void btn_manageSongs_back_click(GButton source, GEvent event) { //_CODE_:btn_manageSongs_back:934174:
@@ -146,6 +149,7 @@ public void btn_manageSongs_back_click(GButton source, GEvent event) { //_CODE_:
 
 public void btn_add_file_click(GButton source, GEvent event) { //_CODE_:btn_add_file:567298:
   _debug(source.getText() + ": " + event);
+   selectInput("Select a file to process:", "uploadFile");
 } //_CODE_:btn_add_file:567298:
 
 
@@ -156,6 +160,7 @@ public void createGUI(){
   G4P.messagesEnabled(false);
   G4P.setGlobalColorScheme(GCScheme.BLUE_SCHEME);
   G4P.setMouseOverEnabled(false);
+  G4P.setDisplayFont("ORANGE_SCHEME", G4P.PLAIN, 12);
   surface.setTitle("SketchWindow");
   MainWindow = GWindow.getWindow(this, "MainWindow", 0, 0, 1120, 630, JAVA2D);
   MainWindow.noLoop();
@@ -176,8 +181,8 @@ public void createGUI(){
   songlist.setOpaque(true);
   songlist.addEventHandler(this, "songlist_click");
   songlist_song_dummy = new GButton(MainWindow, 10, 30, 280, 30);
-  songlist_song_dummy.setText("Face text");
-  songlist_song_dummy.addEventHandler(this, "songlist_song_click");
+  songlist_song_dummy.setText("MP3 Files");
+  songlist_song_dummy.addEventHandler(this, "CENTER");
   songlist.addControl(songlist_song_dummy);
   sidebar.addControl(programm_name);
   sidebar.addControl(songlist);
@@ -200,7 +205,7 @@ public void createGUI(){
   content_window.setText("Tab bar text");
   content_window.setLocalColorScheme(GCScheme.SCHEME_8);
   content_window.setOpaque(false);
-  controls = new GPanel(MainWindow, 0, 410, 800, 130, "Controls");
+  controls = new GPanel(MainWindow, 0, 410, 820, 130, "Controls");
   controls.setCollapsible(false);
   controls.setDraggable(false);
   controls.setText("Controls");
@@ -227,7 +232,7 @@ public void createGUI(){
   control_buttons.addControl(btn_play_pause);
   control_buttons.addControl(btn_back);
   control_buttons.addControl(btn_stop);
-  duration_label = new GLabel(MainWindow, 190, 10, 450, 20);
+  duration_label = new GLabel(MainWindow, 190, 10, 440, 20);
   duration_label.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   duration_label.setText("0 / 0");
   duration_label.setOpaque(false);
@@ -235,7 +240,7 @@ public void createGUI(){
   volume_label.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   volume_label.setText("50%");
   volume_label.setOpaque(false);
-  progress_slider = new GSlider(MainWindow, 190, 40, 450, 40, 10.0);
+  progress_slider = new GSlider(MainWindow, 190, 40, 440, 40, 10.0);
   progress_slider.setLimits(0.0, 0.0, 1.0);
   progress_slider.setNumberFormat(G4P.DECIMAL, 2);
   progress_slider.setOpaque(false);
