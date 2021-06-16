@@ -126,7 +126,7 @@ public void createGUI(){
   G4P.messagesEnabled(false);
   G4P.setGlobalColorScheme(GCScheme.BLUE_SCHEME);
   G4P.setMouseOverEnabled(false);
-  surface.setTitle("Sketch Window");
+  surface.setTitle("SketchWindow");
   MainWindow = GWindow.getWindow(this, "MainWindow", 0, 0, 1120, 630, JAVA2D);
   MainWindow.noLoop();
   MainWindow.setActionOnClose(G4P.EXIT_APP);
@@ -145,7 +145,7 @@ public void createGUI(){
   songlist.setText("Songs");
   songlist.setOpaque(true);
   songlist.addEventHandler(this, "songlist_click");
-  songlist_song_dummy = new GButton(MainWindow, 10, 30, 290, 30);
+  songlist_song_dummy = new GButton(MainWindow, 10, 30, 280, 30);
   songlist_song_dummy.setText("Face text");
   songlist_song_dummy.addEventHandler(this, "songlist_song_click");
   songlist.addControl(songlist_song_dummy);

@@ -117,6 +117,10 @@ public void setCurrentSong(int songId) {
   //set currentSongDuration
   currentSongDuration = currentSong.duration();
 
+  //set progress slider ticks
+  progress_slider.setLimits(0, currentSongDuration);
+  
+  
   //mark active song
   for (int i = 0; i < songlistButtons.size(); i++) {
     songlistButtons.get(i).setTextPlain();
