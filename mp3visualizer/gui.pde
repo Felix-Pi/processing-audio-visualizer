@@ -36,8 +36,6 @@ public void songlist_song_click(GButton source, GEvent event) { //_CODE_:songlis
 } //_CODE_:songlist_song_dummy:200550:
 
 public void btn_manage_songs_click(GButton source, GEvent event) { //_CODE_:btn_manage_songs:731596:
-
-
   try {
     _debug(source.getText() + ": " + event);
     stop_playback();
@@ -138,12 +136,17 @@ public void btn_delete_file(GButton source, GEvent event) { //_CODE_:btn_delete_
   _debug(source.getText() + ": " + event);
 
   boolean result = delete_file(source.getText().replace("Delete ", ""));
+  if (result) {
+    G4P.showMessage(this, "Successfully deleted File!", "INFO", 1);
+    return;
+  }
+  G4P.showMessage(this, "An error occured!", "INFO", 1);
   println("deleted: " + result);
 } //_CODE_:btn_delete_file_dummy:951431:
 
 public void btn_manageSongs_back_click(GButton source, GEvent event) { //_CODE_:btn_manageSongs_back:934174:
   _debug(source.getText() + ": " + event);
-  _debug("Upload at least 1 mp3 file!");
+  G4P.showMessage(this, "Please Upload at least 1 mp3 file!", "INFO", 1);
   if (countUploadedMp3Files() == 0) {
     selectInput("Select a file to process:", "uploadFile");
     return;

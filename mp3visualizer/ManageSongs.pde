@@ -87,11 +87,14 @@ boolean uploadFile(File selection) {
 
       selection.renameTo(newFile);
       inputWinowIsOpen = false;
+
+      G4P.showMessage(this, "Successfully uploaded '"+ selection.getName() +"'", "INFO", 1);
       return true;
     } 
 
     inputWinowIsOpen = false;
-    _debug("Select MP3 File!");
+
+    G4P.showMessage(this, "Please select a MP3 File!", "INFO", 1);
   }
 
   return false;
