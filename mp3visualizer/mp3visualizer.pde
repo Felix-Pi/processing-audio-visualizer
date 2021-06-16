@@ -17,6 +17,13 @@ public Float progress_slider_prevValue;
 public boolean progress_slider_pressed = false;
 
 public void setup() {
+
+  if (countUploadedMp3Files() == 0) {
+    _debug("Upload at least 1 mp3 file!");
+    selectInput("Select a file to process:", "uploadFileSetup");
+    return;
+  }
+
   createGUI();
   customGUI();
 

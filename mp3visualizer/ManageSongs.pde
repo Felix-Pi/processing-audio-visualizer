@@ -1,3 +1,6 @@
+public boolean inputWinowIsOpen = false;
+
+
 public synchronized void load_files() {
   ////songlist_song_dummy.setEnabled(false);
   //songlist_song_dummy.setVisible(false);
@@ -70,17 +73,49 @@ public boolean delete_file(String fileName) {
 }
 
 
-void uploadFile(File selection) {
+boolean uploadFile(File selection) {
   if (selection == null) {
-    println("Window was closed or the user hit cancel.");
+    _debug("Window was closed or the user hit cancel.");
   } else {
-    println("User selected " + selection.getAbsolutePath());
-    print(selection.getName());
-      
+    _debug("User selected " + selection.getAbsolutePath());
+
+    if (selection.getName().contains(".mp3")) {
+      _debug(selection.getName());
+
       String path = sketchPath() + "/data/" + selection.getName();
       File newFile = new File (path);
 
-      selection.renameTo(newFile);  
-    
+      selection.renameTo(newFile);
+      inputWinowIsOpen = false;
+      return true;
+    } 
+
+    inputWinowIsOpen = false;
+    _debug("Select MP3 File!");
   }
+
+  return false;
+}
+
+public void uploadFileSetup(File selection) {
+  if (uploadFile(selection)) {
+    setup();
+  } else {
+    selectInput("Select a file to process:", "uploadFileSetup");
+  }
+}
+
+public Integer countUploadedMp3Files() {
+  String path = sketchPath() + "/data/";
+  File file = new File(path);
+  String[] files = file.list();
+
+  Integer counter = 0;
+  for (int i = 0; i < files.length; i++) {
+    if (files[i].contains(".mp3")) {
+      counter +=1;
+    }
+  }
+
+  return counter;
 }

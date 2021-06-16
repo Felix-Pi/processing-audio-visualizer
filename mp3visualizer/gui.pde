@@ -22,7 +22,7 @@ public void songlist_click(GPanel source, GEvent event) { //_CODE_:songlist:2519
   _debug(source.getText() + ": " + event);
 } //_CODE_:songlist:251911:
 
-public void CENTER(GButton source, GEvent event) { //_CODE_:songlist_song_dummy:200550:
+public void songlist_song_click(GButton source, GEvent event) { //_CODE_:songlist_song_dummy:200550:
   _debug(source.getText() + ": " + event);
 
   for (int i = 0; i < songlistButtons.size(); i++) {
@@ -136,20 +136,26 @@ synchronized public void DrawManageSongsWindow(PApplet appc, GWinData data) { //
 
 public void btn_delete_file(GButton source, GEvent event) { //_CODE_:btn_delete_file_dummy:951431:
   _debug(source.getText() + ": " + event);
-  
+
   boolean result = delete_file(source.getText().replace("Delete ", ""));
   println("deleted: " + result);
 } //_CODE_:btn_delete_file_dummy:951431:
 
 public void btn_manageSongs_back_click(GButton source, GEvent event) { //_CODE_:btn_manageSongs_back:934174:
   _debug(source.getText() + ": " + event);
+  _debug("Upload at least 1 mp3 file!");
+  if (countUploadedMp3Files() == 0) {
+    selectInput("Select a file to process:", "uploadFile");
+    return;
+  }
+
   MainWindow.setVisible(true);
   ManageSongsWindow.setVisible(false);
 } //_CODE_:btn_manageSongs_back:934174:
 
 public void btn_add_file_click(GButton source, GEvent event) { //_CODE_:btn_add_file:567298:
   _debug(source.getText() + ": " + event);
-   selectInput("Select a file to process:", "uploadFile");
+  selectInput("Select a file to process:", "uploadFile");
 } //_CODE_:btn_add_file:567298:
 
 
@@ -182,7 +188,7 @@ public void createGUI(){
   songlist.addEventHandler(this, "songlist_click");
   songlist_song_dummy = new GButton(MainWindow, 10, 30, 280, 30);
   songlist_song_dummy.setText("MP3 Files");
-  songlist_song_dummy.addEventHandler(this, "CENTER");
+  songlist_song_dummy.addEventHandler(this, "songlist_song_click");
   songlist.addControl(songlist_song_dummy);
   sidebar.addControl(programm_name);
   sidebar.addControl(songlist);
