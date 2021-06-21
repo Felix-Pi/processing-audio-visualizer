@@ -7,8 +7,6 @@ import processing.sound.*;
 import ddf.minim.analysis.*;
 import ddf.minim.*;
 
-private ArrayList<Song> Songlist;
-
 Minim minim;
 AudioPlayer player;
 SoundFile song;
