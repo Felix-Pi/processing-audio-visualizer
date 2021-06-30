@@ -42,9 +42,9 @@ int bands = 50;
 float[] spectrum = new float[bands];
 ArrayList<Float> amplitude = new ArrayList<Float>();
 
-String[] myColors = new String[]{ "red", "green", "blue", "mixed" };
+String[] myColors = new String[]{"default",  "red", "green", "blue", "mixed" };
 
-String activeChartColor = "blue";
+String activeChartColor = "default";
 
 public ArrayList<String> load_mp3_files() {
         ArrayList<String> result = new ArrayList<String>();
@@ -284,7 +284,9 @@ public void prev_song(int n) {
 public void stop_song() {
         if(currentSong != null) {
                 currentSong.jump(0);
-                currentSong.stop();
+
+                setProgressSliderValue();
+                            currentSong.stop();
         }
         println("prev_song:");
 }
@@ -444,11 +446,14 @@ public void draw() {
                 case "green":
                         chart_col = color(0, color_val, 0);
                         break;
+                case "blue":
+                        chart_col = color(0, 0, color_val);
+                        break;
                 case "mixed":
                         chart_col = color(color_val + random(color_val, 255), color_val * 0.5f, color_val - random(0, color_val));
                         break;
-                default: //blue
-                        chart_col = color(0, 0, color_val);
+                default:
+                        chart_col = color(0, 0, 255);
                         break;
                 }
                 fft_bar_chart.setColors("fft_bar_in", chart_col);
