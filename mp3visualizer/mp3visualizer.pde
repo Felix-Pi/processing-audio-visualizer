@@ -38,10 +38,10 @@ public void setup() {
 }
 
 public void draw() {
-  if (songlistLoaded) {
-    updateDurationLabel();
-    set_play_pause_btn();
-  }
+//if (songlistLoaded) {
+//  updateDurationLabel();
+//  set_play_pause_btn();
+//}
 }
 
 public ArrayList<String> load_mp3_files() {
