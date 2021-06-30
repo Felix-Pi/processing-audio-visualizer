@@ -1,3 +1,4 @@
+import java.util.*;
 import controlP5.*;
 import processing.sound.*;
 ControlP5 cp5;
@@ -13,12 +14,18 @@ SoundFile file;
 FFT fft;
 Amplitude amp;
 AudioIn in;
-Chart myChart;
-Chart myChart1;
-Chart myChart2;
+Chart fft_line_chart;
+Chart fft_bar_chart;
+Chart amplitude_line_chart;
+
 int bands = 50;
 float[] spectrum = new float[bands];
 ArrayList<Float> amplitude = new ArrayList<Float>();
+
+
+String[] myColors = new String[]{ "red", "green", "blue", "mixed" };
+
+String activeChartColor = "blue";
 
 public ArrayList<String> load_mp3_files() {
         ArrayList<String> result = new ArrayList<String>();
@@ -61,8 +68,8 @@ void setup() {
         cp5.addSlider("volumeSlider").setPosition(1010,400).setSize(20,170).setRange(0.0,1.0).setValue(0.5);
         cp5.addSlider("speedSlider").setPosition(1055,400).setSize(20,170).setRange(0.5,2.0).setNumberOfTickMarks(4).setValue(1.0);
 
-        cp5.addScrollableList("songlist_menu").setPosition(10, 10).setSize(200, 690).setBarHeight(20).setItemHeight(20)
-        .addItems(songFileNames).setType(ScrollableList.LIST);
+        cp5.addScrollableList("songlist_menu")
+        .setPosition(10, 10).setSize(200, 690).setBarHeight(20).setItemHeight(20).addItems(songFileNames).setType(ScrollableList.LIST);
 
         cp5.addTextlabel("currentSongLabel").setPosition(300,10).setColor(0).setFont(createFont("standard 07_58 Regular.ttf", 16));
         cp5.addTextlabel("volLabel").setPosition(1004,575).setText("vol").setColor(0).setFont(createFont("standard 07_58 Regular.ttf", 16));
@@ -71,6 +78,9 @@ void setup() {
 
         cp5.addButton("add_song").setPosition(700,10).setSize(180,25).setFont(createFont("standard 07_58 Regular.ttf", 16));
         cp5.addButton("delete_song").setPosition(900,10).setSize(180,25).setFont(createFont("standard 07_58 Regular.ttf", 16));
+
+        cp5.addScrollableList("visualization_color")
+        .setPosition(900, 40).setSize(180, 70).setBarHeight(20).setItemHeight(20).setItems(myColors).setType(ScrollableList.LIST);
 
         setCurrentSongId(0);
         setProgressSliderRange();
@@ -81,47 +91,51 @@ void setup() {
         amp = new Amplitude(this);
         amp.input(currentSong);
 
-        myChart = cp5.addChart("fft bar")
-                  .setPosition(100, 150)
-                  .setSize(250, 250)
-                  .setRange(0, 18)
-                  .setView(Chart.BAR_CENTERED) // use Chart.LINE, Chart.PIE, Chart.AREA, Chart.BAR_CENTERED
-                  .setStrokeWeight(8)
-                  .setColorCaptionLabel(color(40))
-                  .setFont(createFont("standard 07_58 Regular.ttf", 16))
+        fft_bar_chart = cp5.addChart("fft bar")
+                        .setPosition(100, 150)
+                        .setSize(250, 250)
+                        .setRange(0, 18)
+                        .setView(Chart.BAR_CENTERED) // use Chart.LINE, Chart.PIE, Chart.AREA, Chart.BAR_CENTERED
+                        .setStrokeWeight(8)
+                        .setColorCaptionLabel(color(40))
+                        .setColorBackground(color(243, 239, 237))
+                        .setFont(createFont("standard 07_58 Regular.ttf", 16))
         ;
 
 
-        myChart1 = cp5.addChart("fft line")
-                   .setPosition(400, 150)
-                   .setSize(250, 250)
-                   .setRange(0, 18)
-                   .setView(Chart.LINE) // use Chart.LINE, Chart.PIE, Chart.AREA, Chart.BAR_CENTERED
-                   .setStrokeWeight(5)
-                   .setColorCaptionLabel(color(40))
-                   .setFont(createFont("standard 07_58 Regular.ttf", 16))
+        fft_line_chart = cp5.addChart("fft line")
+                         .setPosition(400, 150)
+                         .setSize(250, 250)
+                         .setRange(0, 18)
+                         .setView(Chart.LINE) // use Chart.LINE, Chart.PIE, Chart.AREA, Chart.BAR_CENTERED
+                         .setStrokeWeight(5)
+                         .setColorCaptionLabel(color(40))
+                         .setColorBackground(color(243, 239, 237))
+                         .setFont(createFont("standard 07_58 Regular.ttf", 16))
         ;
 
-        myChart2 = cp5.addChart("amplitude")
-                   .setPosition(700, 150)
-                   .setSize(250, 250)
-                   .setRange(0, 18)
-                   .setView(Chart.LINE) // use Chart.LINE, Chart.PIE, Chart.AREA, Chart.BAR_CENTERED
-                   .setStrokeWeight(5)
-                   .setColorCaptionLabel(color(40))
-                   .setFont(createFont("standard 07_58 Regular.ttf", 16))
+        amplitude_line_chart = cp5.addChart("amplitude")
+                               .setPosition(700, 150)
+                               .setSize(250, 250)
+                               .setRange(0, 18)
+                               .setView(Chart.LINE) // use Chart.LINE, Chart.PIE, Chart.AREA, Chart.BAR_CENTERED
+                               .setStrokeWeight(5)
+                               .setColorCaptionLabel(color(40))
+                               .setColorBackground(color(243, 239, 237))
+                               .setFont(createFont("standard 07_58 Regular.ttf", 16))
         ;
 
-        myChart.addDataSet("incoming");
-        myChart.setData("incoming", new float[bands]);
+        fft_bar_chart.addDataSet("fft_bar_in");
+        fft_bar_chart.setData("fft_bar_in", new float[bands]);
 
-        myChart1.addDataSet("incoming1");
-        myChart1.setData("incoming1", new float[bands]);
+        fft_line_chart.addDataSet("fft_line_in");
+        fft_line_chart.setData("fft_line_in", new float[bands]);
 
-        myChart2.addDataSet("incoming2");
-        myChart2.setData("incoming2", new float[bands]);
+        amplitude_line_chart.addDataSet("amp_in");
+        amplitude_line_chart.setData("amp_in", new float[bands]);
 
         currentSong.pause();
+        songlistMenuItemActive();
 }
 
 void setCurrentSongId(int id) {
@@ -354,6 +368,10 @@ void controlEvent(ControlEvent theEvent) {
         }
 }
 
+void visualization_color(int c) {
+        print("setting color to: " + myColors[int(c)]);
+        activeChartColor = myColors[int(c)];
+}
 
 void draw() {
         background(255);
@@ -362,12 +380,40 @@ void draw() {
         if(amplitude.size() == bands) {
                 amplitude.remove(0);
         }
-        amplitude.add(amp.analyze());
+        float currentAmplitude = amp.analyze();
+        amplitude.add(currentAmplitude);
+
+        float color_val = map( int(currentAmplitude * 100), 0, 100, 80, 255);
+        color chart_col = color(0, 0, 0);
+
+        switch(activeChartColor) {
+        case "red":
+                chart_col = color(color_val, 0, 0);
+                break;
+        case "green":
+                chart_col = color(0, color_val, 0);
+                break;
+        case "mixed":
+                chart_col = color(color_val + random(color_val, 255), color_val * 0.5, color_val - random(0, color_val));
+                break;
+        default: //blue
+                chart_col = color(0, 0, color_val);
+                break;
+        }
+
+        fft_bar_chart.setColors("fft_bar_in", chart_col);
+        fft_line_chart.setColors("fft_line_in", chart_col);
+        amplitude_line_chart.setColors("amp_in", chart_col);
 
         for(int i = 0; i < bands; i++) {
-                myChart.push("incoming", 3 + spectrum[i] * 3 * 7);
-                myChart1.push("incoming1", 3 + spectrum[i] * 3 * 7 );
-                myChart2.push("incoming2",  3 + amplitude.get(i));
-                setProgressSliderValue();
+                fft_bar_chart.push("fft_bar_in", 3 + spectrum[i] * 3 * 7);
+                fft_line_chart.push("fft_line_in", 3 + spectrum[i] * 3 * 7 );
+                amplitude_line_chart.push("amp_in",  3 + amplitude.get(i));
+
+
+
         }
+
+
+        setProgressSliderValue();
 }
