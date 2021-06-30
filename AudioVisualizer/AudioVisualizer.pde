@@ -64,8 +64,15 @@ void setup() {
         cp5.addButton("stop_song").setPosition(810,500).setSize(180,25).setFont(createFont("standard 07_58 Regular.ttf", 16));
 
         cp5.addSlider("progressSlider").setPosition(120,550).setSize(800,20).setFont(createFont("standard 07_58 Regular.ttf", 16));
-        cp5.addSlider("volumeSlider").setPosition(1010,400).setSize(20,170).setRange(0.0,1.0).setValue(0.5);
-        cp5.addSlider("speedSlider").setPosition(1055,400).setSize(20,170).setRange(0.5,2.0).setNumberOfTickMarks(4).setValue(1.0);
+        cp5.addSlider("volumeSlider").setPosition(1010,450).setSize(20,120).setRange(0.0,1.0).setValue(0.5);
+        cp5.addSlider("speedSlider").setPosition(1055,450).setSize(20,120).setRange(0.5,2.0).setNumberOfTickMarks(4).setValue(1.0);
+
+        cp5.addTextlabel("volLabelValue").setPosition(1004,430).setText("50%").setColor(0).setFont(createFont("standard 07_58 Regular.ttf", 8));
+        cp5.addTextlabel("speedLabelValue").setPosition(1060,430).setText("x1").setColor(0).setFont(createFont("standard 07_58 Regular.ttf", 8));
+
+        cp5.addTextlabel("volLabel").setPosition(1004,575).setText("vol").setColor(0).setFont(createFont("standard 07_58 Regular.ttf", 16));
+        cp5.addTextlabel("speedLabel").setPosition(1041,575).setText("speed").setColor(0).setFont(createFont("standard 07_58 Regular.ttf", 16));
+
 
         cp5.addScrollableList("songlist_menu")
         .setPosition(10, 10).setSize(200, 120).setBarHeight(20).setItemHeight(20).addItems(songFileNames).setType(ScrollableList.LIST);
@@ -78,8 +85,7 @@ void setup() {
 
 
 
-        cp5.addTextlabel("volLabel").setPosition(1004,575).setText("vol").setColor(0).setFont(createFont("standard 07_58 Regular.ttf", 16));
-        cp5.addTextlabel("speedLabel").setPosition(1041,575).setText("speed").setColor(0).setFont(createFont("standard 07_58 Regular.ttf", 16));
+
         cp5.addTextlabel("fftbarLabel").setPosition(95,404).setText("FFT BAR").setColor(0).setFont(createFont("standard 07_58 Regular.ttf", 16));
 
         cp5.addButton("add_song").setPosition(700,10).setSize(180,25).setFont(createFont("standard 07_58 Regular.ttf", 16));
@@ -265,6 +271,8 @@ void stop_song() {
 
 void setVolume(float vol) {
         volume = vol;
+        Textlabel volLabelValue = (Textlabel)cp5.getController("volLabelValue");
+        volLabelValue.setText(round(vol * 100) + "%");
         setVolume();
 }
 
@@ -276,6 +284,10 @@ void setVolume() {
 
 void setSpeed(float sp) {
         speed = sp;
+
+        Textlabel speedLabelValue = (Textlabel)cp5.getController("speedLabelValue");
+        speedLabelValue.setText("x" + sp);
+
         setSpeed();
 }
 
