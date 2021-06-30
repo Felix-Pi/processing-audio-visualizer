@@ -35,7 +35,7 @@ AudioIn in;
 Chart myChart;
 Chart myChart1;
 Chart myChart2;
-int bands = 256;
+int bands = 50;
 float[] spectrum = new float[bands];
 ArrayList<Float> amplitude = new ArrayList<Float>();
 
@@ -103,9 +103,9 @@ public void setup() {
         myChart = cp5.addChart("fft bar")
                   .setPosition(100, 150)
                   .setSize(250, 250)
-                  .setRange(0, 10)
+                  .setRange(0, 18)
                   .setView(Chart.BAR_CENTERED) // use Chart.LINE, Chart.PIE, Chart.AREA, Chart.BAR_CENTERED
-                  .setStrokeWeight(5)
+                  .setStrokeWeight(8)
                   .setColorCaptionLabel(color(40))
                   .setFont(createFont("standard 07_58 Regular.ttf", 16))
         ;
@@ -114,7 +114,7 @@ public void setup() {
         myChart1 = cp5.addChart("fft line")
                    .setPosition(400, 150)
                    .setSize(250, 250)
-                   .setRange(0, 10)
+                   .setRange(0, 18)
                    .setView(Chart.LINE) // use Chart.LINE, Chart.PIE, Chart.AREA, Chart.BAR_CENTERED
                    .setStrokeWeight(5)
                    .setColorCaptionLabel(color(40))
@@ -124,7 +124,7 @@ public void setup() {
         myChart2 = cp5.addChart("amplitude")
                    .setPosition(700, 150)
                    .setSize(250, 250)
-                   .setRange(0, 10)
+                   .setRange(0, 18)
                    .setView(Chart.LINE) // use Chart.LINE, Chart.PIE, Chart.AREA, Chart.BAR_CENTERED
                    .setStrokeWeight(5)
                    .setColorCaptionLabel(color(40))
@@ -381,8 +381,6 @@ public void draw() {
         if(amplitude.size() == bands) {
                 amplitude.remove(0);
         }
-
-
         amplitude.add(amp.analyze());
 
         for(int i = 0; i < bands; i++) {
