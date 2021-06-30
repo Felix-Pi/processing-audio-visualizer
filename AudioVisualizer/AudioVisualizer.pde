@@ -424,14 +424,9 @@ void draw() {
                 amplitude_line_chart.setColors("amp_in", chart_col);
         }
 
-        for(int i = 0; i < bands; i++) {
-                fft_bar_chart.push("fft_bar_in", 3 + spectrum[i] * 3 * 7);
-                fft_line_chart.push("fft_line_in", 3 + spectrum[i] * 3 * 7 );
-                amplitude_line_chart.push("amp_in",  3 + amplitude.get(i));
-
-
-
-        }
+        fft_bar_chart.push("fft_bar_in", 3 + spectrum[0] * 3 * 7);
+        fft_line_chart.push("fft_line_in", 3 + spectrum[0] * 3 * 7 );
+        amplitude_line_chart.push("amp_in",  3 + currentAmplitude * 10 + 5 * volume);
 
 
         setProgressSliderValue();
